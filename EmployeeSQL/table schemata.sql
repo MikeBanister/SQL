@@ -1,80 +1,71 @@
-CREATE TABLE "departments" (
-    "dept_no" 		VARCHAR(10) NOT NULL,
-    "dept_name" 	VARCHAR(50) NOT NULL,
-    CONSTRAINT "pk_departments" PRIMARY KEY (
-        "dept_no"
-     )
-);
-
-CREATE TABLE "employees" (
-    "emp_no" 		VARCHAR(10)	NOT NULL,
-    "title_id" 		VARCHAR(10)	NOT NULL,
-    "birth_date" 	DATE		NOT NULL,
-    "first_name" 	VARCHAR(50)	NOT NULL,
-    "last_name" 	VARCHAR(50)	NOT NULL,
-    "sex" 			VARCHAR(1)	NOT NULL,
-    "hire_date" 	DATE		NOT NULL,
+﻿CREATE TABLE "employees" (
+    "emp_no" VARCHAR   NOT NULL,
+    "title_id" VARCHAR   NOT NULL,
+    "birth_date" DATE   NOT NULL,
+    "first_name" VARCHAR   NOT NULL,
+    "last_name" VARCHAR   NOT NULL,
+    "sex" VARCHAR   NOT NULL,
+    "hire_date" DATE   NOT NULL,
     CONSTRAINT "pk_employees" PRIMARY KEY (
         "emp_no"
      )
 );
 
-CREATE TABLE "titles" (
-    "title_id"		VARCHAR(10)	NOT NULL,
-    "title" 		VARCHAR(50)	NOT NULL,
-    CONSTRAINT "pk_titles" PRIMARY KEY (
-        "title_id"
+CREATE TABLE "department_manager" (
+    "dept_no" VARCHAR   NOT NULL,
+    "emp_no" VARCHAR   NOT NULL,
+    CONSTRAINT "pk_department_manager" PRIMARY KEY (
+        "dept_no","emp_no"
+     )
+);
+
+CREATE TABLE "departments" (
+    "dept_no" VARCHAR   NOT NULL,
+    "dept_name" VARCHAR   NOT NULL,
+    CONSTRAINT "pk_departments" PRIMARY KEY (
+        "dept_no"
+     )
+);
+
+CREATE TABLE "department_employees" (
+    "emp_no" VARCHAR   NOT NULL,
+    "dept_no" VARCHAR   NOT NULL,
+    CONSTRAINT "pk_department_employees" PRIMARY KEY (
+        "emp_no","dept_no"
      )
 );
 
 CREATE TABLE "salaries" (
-    "emp_no" 		VARCHAR(10)	NOT NULL,
-    "salary" 		INTEGER		NOT NULL
+    "emp_no" VARCHAR   NOT NULL,
+    "salary" VARCHAR   NOT NULL,
+    CONSTRAINT "pk_salaries" PRIMARY KEY (
+        "emp_no","salary"
+     )
 );
 
-CREATE TABLE "department_employees" (
-    "emp_no" 		VARCHAR(10)	NOT NULL,
-    "dept_no" 		VARCHAR(10)	NOT NULL,
-	CONSTRAINT "pk_emp_no_dept_no" PRIMARY KEY(
-		"emp_no", "dept_no"
-	) 
+CREATE TABLE "title" (
+    "title_id" VARCHAR   NOT NULL,
+    "title" VARCHAR   NOT NULL,
+    CONSTRAINT "pk_title" PRIMARY KEY (
+        "title_id"
+     )
 );
 
-CREATE TABLE "department_manager" (
-    "dept_no" 		VARCHAR(10)	NOT NULL,
-    "emp_no" 		VARCHAR(10)	NOT NULL
-);
+ALTER TABLE "employees" ADD CONSTRAINT "fk_employees_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "department_employees" ("emp_no");
 
 ALTER TABLE "employees" ADD CONSTRAINT "fk_employees_title_id" FOREIGN KEY("title_id")
-REFERENCES "titles" ("title_id");
-
-ALTER TABLE "salaries" ADD CONSTRAINT "fk_salaries_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "employees" ("emp_no");
-
-ALTER TABLE "department_employees" ADD CONSTRAINT "fk_department_employees_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "employees" ("emp_no");
-
-ALTER TABLE "department_employees" ADD CONSTRAINT "fk_department_employees_dept_no" FOREIGN KEY("dept_no")
-REFERENCES "departments" ("dept_no");
-
-ALTER TABLE "department_manager" ADD CONSTRAINT "fk_department_manager_dept_no" FOREIGN KEY("dept_no")
-REFERENCES "departments" ("dept_no");
+REFERENCES "title" ("title_id");
 
 ALTER TABLE "department_manager" ADD CONSTRAINT "fk_department_manager_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "employees" ("emp_no");
 
+ALTER TABLE "departments" ADD CONSTRAINT "fk_departments_dept_no" FOREIGN KEY("dept_no")
+REFERENCES "department_manager" ("dept_no");
 
+ALTER TABLE "department_employees" ADD CONSTRAINT "fk_department_employees_dept_no" FOREIGN KEY("dept_no")
+REFERENCES "departments" ("dept_no");
 
-
-
-
-
-
-SELECT * 
-FROM employees
-
-
-
-
-
+ALTER TABLE "salaries" ADD CONSTRAINT "fk_salaries_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "employees" ("emp_no");
 
